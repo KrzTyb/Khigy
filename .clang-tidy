@@ -1,0 +1,4 @@
+Checks:          'clang-diagnostic-*,clang-analyzer-*,modernize-*,readability-*,misc-*,performance-*,-modernize-use-trailing-return-type,-readability-avoid-const-params-in-decls,-readability-magic-numbers'
+WarningsAsErrors: '*'
+HeaderFilterRegex: '^(?!.*(build|out)/).*'
+AnalyzeTemporaryDtors: false

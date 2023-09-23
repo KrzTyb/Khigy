@@ -1,0 +1,3 @@
+#pragma once
+
+#define ENABLE_WLROOTS_LOGS @WLROOTS_LOGGER@
