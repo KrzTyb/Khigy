@@ -1,4 +1,5 @@
 
+#include <csignal>
 #include <string>
 
 #include "ProjectConfig.hpp"
@@ -47,10 +48,18 @@ void wlr_log_callback(enum wlr_log_importance importance, const char *fmt,
     }
 }
 
+void handleCriticalSignal(int sigNumber) {
+    LOG_ERROR("Received signal: {}!", sigNumber);
+    // TODO: Implement crash reporter
+}
+
 int main(int /*argc*/, char * /*argv*/[]) {
     logger::init();
 
-    if (getenv("XDG_RUNTIME_DIR") == nullptr) {
+    signal(SIGSEGV, handleCriticalSignal);
+    signal(SIGABRT, handleCriticalSignal);
+
+    if (std::getenv("XDG_RUNTIME_DIR") == nullptr) {
         LOG_ERROR("Missing XDG_RUNTIME_DIR environment!");
         return 1;
     }

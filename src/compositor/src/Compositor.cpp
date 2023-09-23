@@ -5,8 +5,27 @@
 #include "utils/Exceptions.hpp"
 #include "utils/Logger.hpp"
 
+#include <csignal>
 #include <cstdlib>
 #include <memory>
+#include <wayland-server-core.h>
+
+namespace {
+
+int handleSignal(int signalCode, void *data) {
+    LOG_INFO("Received signal: {}", signalCode);
+
+    if (signalCode == SIGTERM || signalCode == SIGINT ||
+        signalCode == SIGKILL) {
+        auto *displayHandle = reinterpret_cast<struct wl_display *>(data);
+        wl_display_destroy_clients(displayHandle);
+        wl_display_terminate(displayHandle);
+    }
+
+    return 0;
+}
+
+} // namespace
 
 namespace compositor {
 
@@ -58,6 +77,15 @@ void Compositor::initialize() {
             throw utils::CompositorError{
                 "Failed to create compositor display!"};
         }
+
+        auto *eventLoop = wl_display_get_event_loop(m_displayHandle);
+
+        // Register signals
+        wl_event_loop_add_signal(eventLoop, SIGINT, handleSignal,
+                                 m_displayHandle);
+        wl_event_loop_add_signal(eventLoop, SIGTERM, handleSignal,
+                                 m_displayHandle);
+
         m_backend->initialize(m_displayHandle);
 
         m_renderer->initialize(m_backend->rawPtr());
