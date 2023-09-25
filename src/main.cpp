@@ -1,5 +1,6 @@
 
 #include <csignal>
+#include <cstdlib>
 #include <string>
 
 #include "ProjectConfig.hpp"
@@ -49,8 +50,10 @@ void wlr_log_callback(enum wlr_log_importance importance, const char *fmt,
 }
 
 void handleCriticalSignal(int sigNumber) {
-    LOG_ERROR("Received signal: {}!", sigNumber);
+    LOG_ERROR("Received signal {}!", sigNumber);
     // TODO: Implement crash reporter
+
+    exit(sigNumber);
 }
 
 int main(int /*argc*/, char * /*argv*/[]) {
@@ -77,6 +80,8 @@ int main(int /*argc*/, char * /*argv*/[]) {
 
     // Run Khigy
     khigyCompositor->run();
+
+    khigyCompositor.reset();
 
     logger::deinit();
     return 0;

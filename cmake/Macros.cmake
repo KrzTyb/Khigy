@@ -25,11 +25,14 @@ function(_app_add_target)
         ${APP_ADD_TARGET_ARG_DEPENDENCIES}
     )
 
+    target_compile_options(${APP_ADD_TARGET_ARG_TARGET_NAME} PRIVATE -Wall -Wextra -Werror)
+
     if(ENABLE_TESTS MATCHES ON AND NOT "${APP_ADD_TARGET_ARG_TESTS}" STREQUAL "")
         set(TEST_TARGET "Test${APP_ADD_TARGET_ARG_TARGET_NAME}")
 
         add_executable(${TEST_TARGET} ${APP_ADD_TARGET_ARG_TESTS})
         target_link_libraries(${TEST_TARGET} PRIVATE ${APP_ADD_TARGET_ARG_TARGET_NAME} GTest::gtest_main GTest::gmock)
+        target_compile_options(${TEST_TARGET} PRIVATE -Wall -Wextra -Werror)
 
         add_test(NAME ${TEST_TARGET}
             COMMAND qemu-aarch64 ${TEST_TARGET}

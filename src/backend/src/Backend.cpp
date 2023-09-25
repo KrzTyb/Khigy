@@ -14,6 +14,8 @@ public:
 
     void initialize(struct wl_display *displayHandle) override;
 
+    bool start() override;
+
     [[nodiscard]] struct wlr_backend *rawPtr() const override {
         return m_backendHandle;
     }
@@ -35,5 +37,7 @@ void DefaultBackend::initialize(struct wl_display *displayHandle) {
         throw utils::CompositorError{"Failed to create backend!"};
     }
 }
+
+bool DefaultBackend::start() { return wlr_backend_start(m_backendHandle); }
 
 } // namespace backend

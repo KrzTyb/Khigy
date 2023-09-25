@@ -21,3 +21,5 @@ app_add_executable(
             Utils
             Compositor
 )
+
+protocol(${CMAKE_PROJECT_NAME} "stable/xdg-shell/xdg-shell.xml" "xdg-shell" false)

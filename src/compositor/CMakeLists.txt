@@ -12,6 +12,8 @@ app_add_library(
 
     SOURCES
         src/Compositor.cpp
+        src/OutputListener.cpp
+        src/OutputInstance.cpp
 
     DEPENDENCIES
         PUBLIC
@@ -21,4 +23,5 @@ app_add_library(
             Allocator
             PkgConfig::wlroots
             PkgConfig::wayland-server
+            PkgConfig::wayland-protocols
 )
