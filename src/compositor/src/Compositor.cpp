@@ -161,6 +161,15 @@ void Compositor::processOutputEvent(OutputInstance::OutputEvent event,
 
 void Compositor::run() {
 
+    const char *socketName = wl_display_add_socket_auto(m_displayHandle);
+    if (socketName == nullptr) {
+        LOG_ERROR("Failed to create unix socket!");
+        wl_display_destroy(m_displayHandle);
+        exit(1);
+    }
+
+    LOG_INFO("Created unix socket: {}", socketName);
+
     if (!m_backend->start()) {
         LOG_ERROR("Failed to start backend!");
         wl_display_destroy(m_displayHandle);
